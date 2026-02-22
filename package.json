@@ -1,0 +1,92 @@
+{
+  "name": "@nigel-dev/opentui-test",
+  "version": "0.1.0",
+  "description": "Testing framework for OpenTUI — headless rendering, input simulation, frame capture, assertions, and LLM-driven automation",
+  "author": "Nigel Bazzeghin <nbazzeghin@gmail.com>",
+  "license": "MIT",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
+    },
+    "./cli": {
+      "import": "./src/cli.ts",
+      "types": "./src/cli.ts"
+    }
+  },
+  "bin": {
+    "opentui-test": "./src/cli.ts"
+  },
+  "files": [
+    "src/",
+    "package.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check src/",
+    "format": "biome format src/",
+    "lint:fix": "biome check --write src/",
+    "test": "bun test",
+    "test:watch": "bun test --watch"
+  },
+  "dependencies": {
+    "@opentui/core": "0.1.80",
+    "@opentui/react": "0.1.80",
+    "react": "^19.0.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.2",
+    "@types/bun": "latest",
+    "@types/react": "^19.0.0"
+  },
+  "peerDependencies": {
+    "@opentui/core": ">=0.1.0",
+    "@opentui/react": ">=0.1.0",
+    "react": ">=19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@opentui/core": {
+      "optional": false
+    },
+    "@opentui/react": {
+      "optional": false
+    },
+    "react": {
+      "optional": false
+    }
+  },
+  "keywords": [
+    "opentui",
+    "tui",
+    "terminal",
+    "testing",
+    "test",
+    "headless",
+    "driver",
+    "automation",
+    "snapshot",
+    "golden-file",
+    "visual-regression",
+    "llm",
+    "ai-agent"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nigel-dev/opentui-test"
+  },
+  "bugs": {
+    "url": "https://github.com/nigel-dev/opentui-test/issues"
+  },
+  "homepage": "https://github.com/nigel-dev/opentui-test#readme",
+  "engines": {
+    "bun": ">=1.0.0"
+  }
+}

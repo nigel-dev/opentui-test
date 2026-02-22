@@ -1,0 +1,55 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+out/
+*.tgz
+*.tsbuildinfo
+
+# Bun
+bun.lockb
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Sisyphus
+.sisyphus/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing outputs
+coverage/
+*.lcov
+.nyc_output/
+snapshots/
+golden/
+recordings/
+frames/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Caches
+.eslintcache
+.cache
+
+# Temp
+tmp/
+temp/
+.tmp/
+.temp/
