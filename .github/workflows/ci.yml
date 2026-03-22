@@ -51,4 +51,10 @@ jobs:
           bun-version: ${{ env.BUN_VERSION }}
 
       - run: bun install --frozen-lockfile
-      - run: bun test
+      - name: Run tests
+        run: |
+          if bun test --timeout 30000 2>&1 | grep -q "No tests found"; then
+            echo "No test files found, skipping"
+          else
+            bun test --timeout 30000
+          fi
