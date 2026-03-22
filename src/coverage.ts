@@ -23,9 +23,14 @@ export interface CoverageTracker {
   isTracking(): boolean;
 }
 
-const KNOWN_VIEWS = ["Dashboard", "Providers", "Trends", "Projects", "Settings"];
-
-export function createCoverageTracker(knownViews: string[] = KNOWN_VIEWS): CoverageTracker {
+/**
+ * Create a coverage tracker for monitoring view navigation during test sessions.
+ *
+ * @param knownViews - The complete list of views in your app. Used to calculate
+ *   coverage percentage (views visited / total views). Pass your app's view names
+ *   e.g. `["Home", "Settings", "Profile"]`. If empty, coveragePercentage will be undefined.
+ */
+export function createCoverageTracker(knownViews: string[] = []): CoverageTracker {
   let tracking = false;
   let sessionStart = 0;
   let currentView: string | null = null;
@@ -107,33 +112,31 @@ export function createCoverageTracker(knownViews: string[] = KNOWN_VIEWS): Cover
   };
 }
 
-export function detectViewFromFrame(frame: string): string | null {
+export function detectViewFromFrame(frame: string, knownViews: string[] = []): string | null {
   const lines = frame.split("\n").slice(0, 5);
   const headerArea = lines.join("\n");
 
-  if (headerArea.includes("[1] Dashboard") && headerArea.includes("│")) {
-    const match = headerArea.match(/\[(\d)\] (\w+)/g);
-    if (match) {
-      for (const m of match) {
-        if (!m.includes("[")) continue;
-        const viewMatch = m.match(/\[(\d)\] (\w+)/);
-        if (viewMatch) {
-          const num = viewMatch[1];
-          const name = viewMatch[2];
-          if (
-            headerArea.includes(`[${num}]`) &&
-            frame.toLowerCase().includes(name?.toLowerCase() ?? "")
-          ) {
-            if (headerArea.includes(`[${num}] ${name}`) && !headerArea.includes(`│ ${name}`)) {
-              return name ?? null;
-            }
+  const numberedViewPattern = /\[(\d)\] (\w+)/g;
+  const matches = headerArea.match(numberedViewPattern);
+  if (matches && headerArea.includes("│")) {
+    for (const m of matches) {
+      const viewMatch = m.match(/\[(\d)\] (\w+)/);
+      if (viewMatch) {
+        const num = viewMatch[1];
+        const name = viewMatch[2];
+        if (
+          headerArea.includes(`[${num}]`) &&
+          frame.toLowerCase().includes(name?.toLowerCase() ?? "")
+        ) {
+          if (headerArea.includes(`[${num}] ${name}`) && !headerArea.includes(`│ ${name}`)) {
+            return name ?? null;
           }
         }
       }
     }
   }
 
-  for (const view of KNOWN_VIEWS) {
+  for (const view of knownViews) {
     if (frame.includes(`${view} `) || frame.includes(` ${view}`)) {
       const viewLower = view.toLowerCase();
       const frameLower = frame.toLowerCase();

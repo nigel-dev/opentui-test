@@ -101,7 +101,7 @@ describe("createCoverageTracker", () => {
       viewCounts: { Dashboard: 1, Projects: 1 },
       totalViewChanges: 2,
     });
-    expect(report.coveragePercentage).toBe(40);
+    expect(report.coveragePercentage).toBeUndefined();
     expect(Array.isArray(report.viewsVisited)).toBe(true);
   });
 
@@ -117,7 +117,7 @@ describe("createCoverageTracker", () => {
     expect(report.sessionEnd).toBe(1_750);
   });
 
-  test("coveragePercentage uses default known views", () => {
+  test("default empty knownViews gives undefined coveragePercentage", () => {
     const tracker = createCoverageTracker();
     tracker.start();
 
@@ -125,7 +125,7 @@ describe("createCoverageTracker", () => {
     tracker.recordView("Providers");
 
     const report = tracker.getReport();
-    expect(report.coveragePercentage).toBe(40);
+    expect(report.coveragePercentage).toBeUndefined();
   });
 
   test("custom knownViews changes percentage calculation", () => {
@@ -174,25 +174,33 @@ describe("detectViewFromFrame", () => {
     expect(detectViewFromFrame(frame)).toBe("Dashboard");
   });
 
-  test("detects known view from body content", () => {
+  test("detects known view from body content when knownViews provided", () => {
+    const views = ["Dashboard", "Providers", "Trends"];
     const frame = ["App Header", "Providers", "Providers view", "Some detail text", "Footer"].join(
       "\n",
     );
 
-    expect(detectViewFromFrame(frame)).toBe("Providers");
+    expect(detectViewFromFrame(frame, views)).toBe("Providers");
   });
 
   test("returns null when frame has no recognizable view", () => {
+    const views = ["Dashboard", "Providers"];
     const frame = ["App Header", "Metrics", "No view identifiers", "Footer"].join("\n");
+    expect(detectViewFromFrame(frame, views)).toBeNull();
+  });
+
+  test("returns null with empty knownViews and no header pattern", () => {
+    const frame = ["App Header", "Providers view", "Footer"].join("\n");
     expect(detectViewFromFrame(frame)).toBeNull();
   });
 
   test("edge cases: partial match and lowercase-only content do not match", () => {
+    const views = ["Dashboard", "Providers"];
     const partialFrame = ["Header", "Dash", "Provider", "Footer"].join("\n");
     const lowercaseFrame = ["header", "dashboard view", "providers view", "footer"].join("\n");
 
-    expect(detectViewFromFrame(partialFrame)).toBeNull();
-    expect(detectViewFromFrame(lowercaseFrame)).toBeNull();
+    expect(detectViewFromFrame(partialFrame, views)).toBeNull();
+    expect(detectViewFromFrame(lowercaseFrame, views)).toBeNull();
   });
 });
 
