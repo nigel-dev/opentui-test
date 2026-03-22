@@ -18,10 +18,12 @@
     }
   },
   "bin": {
-    "opentui-test": "./src/cli.ts"
+    "opentui-test": "./bin/opentui-test.js"
   },
   "files": [
+    "bin/",
     "src/",
+    "!src/**/*.test.ts",
     "package.json",
     "README.md",
     "LICENSE"
@@ -34,18 +36,18 @@
     "lint": "biome check src/",
     "format": "biome format src/",
     "lint:fix": "biome check --write src/",
-    "test": "bun test",
+    "test": "bun test src/diff.test.ts src/coverage.test.ts src/recorder.test.ts src/assertions.test.ts && bun test src/driver.test.ts",
+    "test:unit": "bun test src/diff.test.ts src/coverage.test.ts src/recorder.test.ts src/assertions.test.ts",
+    "test:integration": "bun test src/driver.test.ts",
     "test:watch": "bun test --watch"
-  },
-  "dependencies": {
-    "@opentui/core": "0.1.80",
-    "@opentui/react": "0.1.80",
-    "react": "^19.0.0"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.2",
+    "@opentui/core": "0.1.87",
+    "@opentui/react": "0.1.87",
     "@types/bun": "latest",
-    "@types/react": "^19.0.0"
+    "@types/react": "^19.0.0",
+    "react": "^19.0.0"
   },
   "peerDependencies": {
     "@opentui/core": ">=0.1.0",
