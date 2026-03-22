@@ -1,6 +1,6 @@
 {
   "name": "@nigel-dev/opentui-test",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Testing framework for OpenTUI — headless rendering, input simulation, frame capture, assertions, and LLM-driven automation",
   "author": "Nigel Bazzeghin <nbazzeghin@gmail.com>",
   "license": "MIT",
